@@ -74,6 +74,13 @@ public class HeapArray {
         heap[index] = holdValue;
     }
 
+    public int peek() {
+        if(isEmpty()) {
+            throw new IndexOutOfBoundsException("Empty Heap");
+        }
+        return heap[0];
+    }
+
     public boolean isFull() {
         return size == heap.length;
     }
