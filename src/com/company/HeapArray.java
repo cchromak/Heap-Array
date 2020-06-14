@@ -20,6 +20,51 @@ public class HeapArray {
         size++;
     }
 
+    public int delete(int index) {
+        if(isEmpty()) {
+            throw new IndexOutOfBoundsException("EMPTY HEAP");
+        }
+        int parentIndex = getParent(index);
+        int deletedValued = heap[index];
+
+        heap[index] = heap[size - 1];
+        if(index == 0 || heap[index] > heap[parentIndex]){
+            bubbleDown(index, size -1);
+        } else {
+            bubbleUp(index);
+        }
+        size--;
+        return deletedValued;
+    }
+
+    private void bubbleDown(int index, int lastHeapIndex) {
+        int childToSwap;
+
+        while (index <= lastHeapIndex) {
+            int leftChild = getLeftChild(index);
+            int rightChild = getRightChild(index);
+            if (leftChild <= lastHeapIndex) {
+                if (rightChild > lastHeapIndex) {
+                    childToSwap = leftChild;
+                } else {
+                    childToSwap = (heap[leftChild] > heap[rightChild] ? leftChild : rightChild);
+                }
+
+                if (heap[index] < heap[childToSwap]) {
+                    int temp = heap[index];
+                    heap[index] = heap[childToSwap];
+                    heap[childToSwap] = temp;
+                } else {
+                    break;
+                }
+                index = childToSwap;
+            }
+            else {
+                break;
+            }
+        }
+    }
+
     private void bubbleUp(int index) {
         int holdValue = heap[index];
         while (index > 0 && holdValue > heap[getParent(index)]) {
@@ -43,6 +88,10 @@ public class HeapArray {
 
     public int getRightChild(int index) {
         return index * 2 + 2;
+    }
+
+    public boolean isEmpty() {
+        return size == 0;
     }
 
     public void printHeap() {

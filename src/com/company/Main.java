@@ -10,12 +10,14 @@ public class Main {
 
 	    heap.inset(1);
         heap.inset(-43);
-        heap.inset(34);
+        heap.inset(35);
         heap.inset(67);
         heap.inset(10);
         heap.inset(-10);
         heap.inset(34);
 
+        heap.printHeap();
+        heap.delete(1);
         heap.printHeap();
 
     }
