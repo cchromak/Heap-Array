@@ -21,57 +21,77 @@ public class HeapArray {
     }
 
     public int delete(int index) {
-        if(isEmpty()) {
-            throw new IndexOutOfBoundsException("EMPTY HEAP");
+        if (isEmpty()) {
+            throw new IndexOutOfBoundsException("Heap is empty");
         }
-        int parentIndex = getParent(index);
-        int deletedValued = heap[index];
+
+        int parent = getParent(index);
+        int deletedValue = heap[index];
 
         heap[index] = heap[size - 1];
-        if(index == 0 || heap[index] > heap[parentIndex]){
-            bubbleDown(index, size -1);
-        } else {
+
+        if (index == 0 || heap[index] < heap[parent]) {
+            bubbleDown(index, size - 1);
+        }
+        else {
             bubbleUp(index);
         }
+
         size--;
-        return deletedValued;
+
+        return deletedValue;
+
+    }
+    
+    public void heapSort() {
+        int lastHeapIndex = size - 1;
+        for (int i = 0; i < lastHeapIndex; i++) {
+            int temp = heap[0];
+            heap[0] = heap[lastHeapIndex - i];
+            heap[lastHeapIndex - i] = temp;
+            bubbleDown(0, lastHeapIndex - i - 1);
+        }
+    }
+
+    private void bubbleUp(int index) {
+        int newValue = heap[index];
+        while (index > 0 && newValue > heap[getParent(index)]) {
+            heap[index] = heap[getParent(index)];
+            index = getParent(index);
+        }
+
+        heap[index] = newValue;
     }
 
     private void bubbleDown(int index, int lastHeapIndex) {
         int childToSwap;
 
         while (index <= lastHeapIndex) {
-            int leftChild = getLeftChild(index);
-            int rightChild = getRightChild(index);
+            int leftChild = getChild(index, true);
+            int rightChild = getChild(index, false);
             if (leftChild <= lastHeapIndex) {
                 if (rightChild > lastHeapIndex) {
                     childToSwap = leftChild;
-                } else {
+                }
+                else {
                     childToSwap = (heap[leftChild] > heap[rightChild] ? leftChild : rightChild);
                 }
 
                 if (heap[index] < heap[childToSwap]) {
-                    int temp = heap[index];
+                    int tmp = heap[index];
                     heap[index] = heap[childToSwap];
-                    heap[childToSwap] = temp;
-                } else {
+                    heap[childToSwap] = tmp;
+                }
+                else {
                     break;
                 }
+
                 index = childToSwap;
             }
             else {
                 break;
             }
         }
-    }
-
-    private void bubbleUp(int index) {
-        int holdValue = heap[index];
-        while (index > 0 && holdValue > heap[getParent(index)]) {
-            heap[index] = heap[getParent(index)];
-            index = getParent(index);
-        }
-        heap[index] = holdValue;
     }
 
     public int peek() {
@@ -89,12 +109,8 @@ public class HeapArray {
         return (index -1) / 2;
     }
 
-    public int getLeftChild(int index) {
-        return index * 2 + 1;
-    }
-
-    public int getRightChild(int index) {
-        return index * 2 + 2;
+    public int getChild(int index, boolean left) {
+        return 2 * index + (left ? 1 : 2);
     }
 
     public boolean isEmpty() {
@@ -102,6 +118,12 @@ public class HeapArray {
     }
 
     public void printHeap() {
-        System.out.println(Arrays.toString(this.heap));
+        for (int i = 0; i < size; i++) {
+            System.out.print(heap[i]);
+            if(i + 1 != size){
+                System.out.print(", ");
+            }
+        }
+        System.out.println();
     }
 }
